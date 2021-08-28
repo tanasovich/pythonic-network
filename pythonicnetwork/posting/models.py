@@ -13,5 +13,6 @@ class Post(models.Model):
 
 
 class Like(models.Model):
+    like_date = models.DateTimeField(default=timezone.now())
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
