@@ -5,7 +5,7 @@ from django.utils import timezone
 
 class Post(models.Model):
     content = models.CharField(max_length=255)
-    posted_date = models.DateTimeField(default=timezone.now())
+    posted_date = models.DateTimeField(default=timezone.now)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -13,6 +13,6 @@ class Post(models.Model):
 
 
 class Like(models.Model):
-    like_date = models.DateTimeField(default=timezone.now())
+    like_date = models.DateTimeField(default=timezone.now)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
