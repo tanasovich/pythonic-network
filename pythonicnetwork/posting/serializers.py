@@ -20,8 +20,3 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
         fields = ['username']
-
-
-class AnalyticSerializer(serializers.Serializer):
-    date = serializers.DateField(read_only=True)
-    count = serializers.IntegerField(read_only=True)
