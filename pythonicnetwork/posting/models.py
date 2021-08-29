@@ -8,6 +8,8 @@ class Post(models.Model):
     posted_date = models.DateTimeField(default=timezone.now)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
+    objects = models.Manager()
+
     def __str__(self):
         return self.content
 
@@ -16,3 +18,12 @@ class Like(models.Model):
     like_date = models.DateTimeField(default=timezone.now)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
+
+    objects = models.Manager()
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    last_request = models.DateTimeField(default=timezone.now)
+
+    objects = models.Manager()

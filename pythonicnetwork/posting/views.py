@@ -8,8 +8,8 @@ from rest_framework.response import Response
 from rest_framework import viewsets
 from rest_framework import permissions
 
-from .models import Post, Like
-from .serializers import PostSerializer, LikeSerializer, UserSerializer
+from .models import Post, Like, Profile
+from .serializers import PostSerializer, LikeSerializer, UserSerializer, ProfileSerializer
 
 
 class PostViewSet(viewsets.ModelViewSet):
@@ -43,3 +43,18 @@ class AnalyticsView(views.APIView):
             .values('date', 'count')
 
         return Response(JSONRenderer().render(queryset))
+
+
+class UserActivityView(views.APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request: Request, id: int):
+        user = User.objects.get(pk=id)
+        last_request = ProfileSerializer(Profile.objects.get(user=user.pk)).data['last_request']
+
+        activity: dict = {
+            'last_login': user.last_login,
+            'last_request': last_request
+        }
+
+        return Response(activity)
