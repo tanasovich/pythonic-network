@@ -33,7 +33,7 @@ class UserViewSet(viewsets.ModelViewSet):
 class AnalyticsView(views.APIView):
     permission_classes = [permissions.IsAdminUser]
 
-    def get(self, request: Request, format=None):
+    def get(self, request: Request):
         date_from = request.query_params['date_from']
         date_to = request.query_params['date_to']
         queryset = Like.objects\
