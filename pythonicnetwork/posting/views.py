@@ -16,13 +16,13 @@ from .serializers import PostSerializer, LikeSerializer, UserSerializer, Profile
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    permission_classes = [IsOwnerOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
 
 
 class LikeViewSet(viewsets.ModelViewSet):
     queryset = Like.objects.all()
     serializer_class = LikeSerializer
-    permission_classes = [IsOwnerOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
 
 
 class UserViewSet(viewsets.ModelViewSet):
