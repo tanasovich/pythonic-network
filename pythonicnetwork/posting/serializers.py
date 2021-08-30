@@ -5,15 +5,29 @@ from .models import Post, Like, Profile
 
 
 class PostSerializer(serializers.HyperlinkedModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(read_only=True, default=serializers.CurrentUserDefault())
+
     class Meta:
         model = Post
-        fields = ['content', 'posted_date', 'user']
+        fields = ['id', 'content', 'posted_date', 'user']
+        read_only_fields = ['id']
+
+    def save(self, **kwargs):
+        kwargs['user'] = self.fields['user'].get_default()
+        return super().save(**kwargs)
 
 
 class LikeSerializer(serializers.HyperlinkedModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(read_only=True, default=serializers.CurrentUserDefault())
+
     class Meta:
         model = Like
-        fields = ['like_date', 'user', 'post']
+        fields = ['id', 'like_date', 'user', 'post']
+        read_only_fields = ['id']
+
+    def save(self, **kwargs):
+        kwargs['user'] = self.fields['user'].get_default()
+        return super().save(**kwargs)
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):

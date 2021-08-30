@@ -9,25 +9,26 @@ from rest_framework import viewsets
 from rest_framework import permissions
 
 from .models import Post, Like, Profile
+from .permissions import IsOwnerOrReadOnly, ReadOnly
 from .serializers import PostSerializer, LikeSerializer, UserSerializer, ProfileSerializer
 
 
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsOwnerOrReadOnly]
 
 
 class LikeViewSet(viewsets.ModelViewSet):
     queryset = Like.objects.all()
     serializer_class = LikeSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsOwnerOrReadOnly]
 
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAdminUser | ReadOnly]
 
 
 class AnalyticsView(views.APIView):
@@ -36,17 +37,16 @@ class AnalyticsView(views.APIView):
     def get(self, request: Request):
         date_from = request.query_params['date_from']
         date_to = request.query_params['date_to']
-        queryset = Like.objects\
-            .annotate(date=TruncDay('like_date'))\
-            .values('date')\
-            .annotate(count=Count('id'))\
+        queryset = Like.objects \
+            .annotate(date=TruncDay('like_date')) \
+            .values('date') \
+            .annotate(count=Count('id')) \
             .values('date', 'count')
 
         return Response(JSONRenderer().render(queryset))
 
 
 class UserActivityView(views.APIView):
-    permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request: Request, id: int):
         user = User.objects.get(pk=id)
