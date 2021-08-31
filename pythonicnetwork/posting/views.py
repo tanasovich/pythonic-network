@@ -9,7 +9,7 @@ from rest_framework import viewsets
 from rest_framework import permissions
 
 from .models import Post, Like, Profile
-from .permissions import IsOwnerOrReadOnly, ReadOnly
+from .permissions import IsOwnerOrReadOnly, IsNewUser, ReadOnly
 from .serializers import PostSerializer, LikeSerializer, UserSerializer, ProfileSerializer
 
 
@@ -28,7 +28,7 @@ class LikeViewSet(viewsets.ModelViewSet):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [permissions.IsAdminUser | ReadOnly]
+    permission_classes = [permissions.IsAdminUser | IsNewUser | ReadOnly]
 
 
 class AnalyticsView(views.APIView):
